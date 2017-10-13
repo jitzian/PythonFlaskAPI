@@ -4,15 +4,29 @@ from sqlalchemy import create_engine
 from json import dumps
 
 #Create a engine for connecting to SQLite3.
-#Assuming salaries.db is in your app root folder
-
-# e = create_engine ('sqlite:///salaries.db')
+#Assuming walNee.db is in your app root folder
 e = create_engine ('sqlite:///walNee.db')
 
 app = Flask(__name__)
 api = Api(app)
 
 # API
+class Stores(Resource):
+	def get(self):
+		#Connect to databse
+		conn = e.connect()
+		#Perform query and return JSON data
+		query = conn.execute("select * from TB_STORE")
+		return {'stores': [i[1] for i in query.cursor.fetchall()]}
+
+class Lanes(Resource):
+	def get(self):
+		#Connect to databse
+		conn = e.connect()
+		#Perform query and return JSON data
+		query = conn.execute("select * from TB_LANE")
+		return {'lanes': [i[2] for i in query.cursor.fetchall()]}
+
 class Categories(Resource):
 	def get(self):
 		#Connect to databse
@@ -32,16 +46,10 @@ class Products(Resource):
 		result = {'data': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
 		return result
 
+api.add_resource(Stores, '/stores')
+api.add_resource(Lanes, '/lanes')
 api.add_resource(Categories, '/categories')
 api.add_resource(Products, '/products')
-
-class AllResults(Resource):
-	def get(self):
-		#Connect to databse
-		conn = e.connect()
-		#Perform query and return JSON data
-		query = conn.execute("select * from TB_CATEGORY")
-		return {'categories': [i[2] for i in query.cursor.fetchall()]}
 
 if __name__ == '__main__':
     app.run(debug=True)
