@@ -55,7 +55,8 @@ class Products(Resource):
 						STORE.STO_NAME,
 						CATEGORY.CAT_NAME,
 						LANE.LAN_NAME,
-						LANE.LAN_NUM_NAME
+						LANE.LAN_NUM_NAME,
+						PROD.PROD_PRICE
 						from
 							TB_STORE AS STORE,
 							TB_PRODUCT AS PROD,
